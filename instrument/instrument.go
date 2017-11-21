@@ -140,6 +140,12 @@ func CollectedRequest(ctx context.Context, method string, col Collector, toStatu
 
 	if err != nil {
 		ext.Error.Set(sp, true)
+		errStr := err.Error()
+		const maxTagErrorLen = 128
+		if len(errStr) > maxTagErrorLen {
+			errStr = errStr[:maxTagErrorLen] + "..."
+		}
+		sp.SetTag("error.message", errStr)
 	}
 	sp.Finish()
 
